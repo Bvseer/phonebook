@@ -15,17 +15,17 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('surname');
             $table->string('patronymic');
-            $table->datetime('birthdate');
-            $table->datetime('phone_number');
-            $table->datetime('email');
+            $table->date('birthdate');
+            $table->string('phone_number', 20);
+            $table->string('email');
             $table->timestamps();
             $table->unique(['name', 'surname', 'patronymic']);
         });
-        
+
     }
 
     /**

@@ -17,14 +17,18 @@ use App\Http\Controllers\API\RegisterController;
 */
 
 
-Route::controller(RegisterController::class)->group(function(){
+Route::controller(RegisterController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
 });
 
-Route::group([ 'namespace' => 'API', 'middleware' => ['auth:sanctum']], function() {
-    Route::group( ['prefix' => 'contact'], function() {
-        Route::get('/search-by-fullname', [ContactController::class, 'searchByFullname'])->name('searchByFullname');
+Route::group(['namespace' => 'API', 'middleware' => ['auth:sanctum']], function () {
+    Route::group(['prefix' => 'contact'], function () {
+        Route::get('/search-by-fullname', [ContactController::class, 'searchByFullname'])->name('SearchByFullname');
+        Route::get('/search-by-phone_number', [ContactController::class, 'searchByPhoneNumber'])->name('SearchByPhoneNumber');
+        Route::get('/search-by-email', [ContactController::class, 'searchByEmail'])->name('SearchByEmail');
+        Route::get('/getContacts/{id}', [ContactController::class, 'getContacts'])->name('GetContacts');
+        Route::post('/deleteContact/{id}', [ContactController::class, 'deleteContact'])->name('GetContacts');
     });
 });
 

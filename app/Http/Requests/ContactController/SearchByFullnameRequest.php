@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\RegisterController;
+namespace App\Http\Requests\ContactController;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Services\API\BaseService;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class SearchByFullnameRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,9 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'c_password' => ['required', 'same:password'],
+            'name' => ['string', 'required_without_all:surname,patronymic'],
+            'surname' => ['string', 'required_without_all:name,patronymic'],
+            'patronymic' => ['string', 'required_without_all:name,surname'],
         ];
     }
 
