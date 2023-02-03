@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailable;
 
 class SendEmails extends Command
 {
@@ -11,7 +14,7 @@ class SendEmails extends Command
      *
      * @var string
      */
-    protected $signature = 'mail:send';
+    protected $signature = 'email:send';
 
     /**
      * The console command description.
@@ -27,8 +30,10 @@ class SendEmails extends Command
      */
     public function handle()
     {
-        // User::where('birthdate')
-        // Mail::to($request->user())->send(new MailableClass);
+        $users = User::all();
+        foreach($users as $user) {   
+            Mail::to($user)->send(new MailableClass);
+        }
         return Command::SUCCESS;
     }
 }
