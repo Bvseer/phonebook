@@ -3,34 +3,26 @@
 namespace App\Services\API;
 
 use App\Models\Contact;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class ContactService
 {
-    public static function searchByFullname(string $name,string $surname,string $patronymic)
+    public static function search(string $value)
     {
-        $contact = Contact::where('name', 'like', "%$name%")
-            ->orWhere('surname', 'like', "%$surname%")
-            ->orWhere('patronymic', 'like', "%$patronymic%");
-//            ->orWhere(DB::raw('CONCAT(name, " ", surname, " ", patronymic)'), 'like', "%$name $surname $patronymic%")
-//            ->get();
-        dd($contact->toSql(), $contact->getBindings());
-    }
-    public static function searchByPhoneNumber(string $phone_number)
-    {
-        return Contact::where('phone_number', 'like', "%$phone_number%")->get();
-    }
-    public static function searchByEmail(string $email)
-    {
-        return Contact::where('email', 'like', "%$email%")->get();
+        return User::leftjoin('contacts as c', 'c.user_id', 'users.id')
+            ->whereRaw("CONCAT(users.surname, ' ', users.name, ' ', users.patronymic) like '%$value%'")
+            ->orWhere('c.email', 'like', "%$value%")
+            ->orWhere('users.email', 'like', "%$value%")
+            ->orWhere('c.phone_number', 'like', "%$value%")
+            ->get();
     }
 
-    public static function getContacts(int $id)
+    public static function get(int $id)
     {
         return Contact::where('user_id', $id)->get();
     }
 
-    public static function deleteContact(int $id)
+    public static function delete(int $id)
     {
         return Contact::where('user_id', $id)->delete();
     }

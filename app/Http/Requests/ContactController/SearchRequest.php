@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class SearchByFullnameRequest extends FormRequest
+class SearchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,7 @@ class SearchByFullnameRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['string', 'required_without_all:surname,patronymic'],
-            'surname' => ['string', 'required_without_all:name,patronymic'],
-            'patronymic' => ['string', 'required_without_all:name,surname'],
+            'value' => ['string', 'required'],
         ];
     }
 

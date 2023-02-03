@@ -24,9 +24,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::group(['namespace' => 'API', 'middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'contact'], function () {
-        Route::get('/search-by-fullname', [ContactController::class, 'searchByFullname'])->name('SearchByFullname');
-        Route::get('/search-by-phone_number', [ContactController::class, 'searchByPhoneNumber'])->name('SearchByPhoneNumber');
-        Route::get('/search-by-email', [ContactController::class, 'searchByEmail'])->name('SearchByEmail');
+        Route::get('/search', [ContactController::class, 'search'])->name('SearchByFullname');
         Route::get('/getContacts/{id}', [ContactController::class, 'getContacts'])->name('GetContacts');
         Route::post('/deleteContact/{id}', [ContactController::class, 'deleteContact'])->name('GetContacts');
     });

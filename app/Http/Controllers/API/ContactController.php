@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ContactController\SearchByFullnameRequest;
+use App\Http\Requests\ContactController\SearchRequest;
 use Illuminate\Http\Request;
 use App\Services\API\BaseService;
 use App\Services\API\ContactService;
@@ -11,35 +11,20 @@ use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
-    public function searchByFullname(SearchByFullnameRequest $request)
+    public function search(SearchRequest $request)
     {
-        return BaseService::sendResponse(
-            ContactService::searchByFullname($request->name, $request->surname, $request->patronymic), 'success'
-        );
-    }
-    public function searchByPhoneNumber(Request $request)
-    {
-        return BaseService::sendResponse(
-            ContactService::searchByPhoneNumber($request->name), 'success'
-        );
-    }
-    public function searchByEmail(Request $request)
-    {
-        return BaseService::sendResponse(
-            ContactService::searchByEmail($request->name), 'success'
-        );
+        $contacts = ContactService::search($request->value);
+        return $contacts ? BaseService::sendResponse($contacts, 'success') : BaseService::sendError('error', 'no contact found');
     }
 
-    public function getContacts(int $id)
+    public function get(int $id)
     {
-        return BaseService::sendResponse(
-            ContactService::getContacts($id), 'success'
-        );
+        $contact = ContactService::get($id);
+        return $contact ? BaseService::sendResponse($contact, 'success') : BaseService::sendError('error', 'contact not found');
     }
 
-    public function deleteContact(int $id): Response
+    public function delete(int $id): Response
     {
-        return ContactService::deleteContact($id) ? BaseService::sendResponse("User:" . $id, 'successfully deleted') : BaseService::sendError("User: " . $id, 'not found');
+        return ContactService::delete($id) ? BaseService::sendResponse("User:" . $id, 'successfully deleted') : BaseService::sendError("User: " . $id, 'not found');
     }
-
 }
