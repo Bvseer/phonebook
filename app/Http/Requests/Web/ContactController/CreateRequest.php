@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\RegisterController;
+namespace App\Http\Requests\Web\ContactController;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Services\API\BaseService;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class CreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,17 +27,17 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'c_password' => ['required', 'same:password'],
+            'contacts' => ['required', 'array'],
+            'contacts.*.phone_number' => ['required', 'string', 'unique:contacts'],
+            'contacts.*.email' => ['required', 'string', 'unique:contacts'],
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
+        $error = $validator->errors();
         throw new HttpResponseException(
-            BaseService::sendError('validation error', $validator->errors()->messages(), 400)
+            BaseService::sendError(reset($error), [], 400)
         );
     }
 }

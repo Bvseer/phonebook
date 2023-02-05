@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\Auth\RegisterController;
+use App\Http\Controllers\API\Admin\UserController;
+use App\Http\Controllers\API\User\ContactController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\ContactController;
-use App\Http\Controllers\API\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,16 +18,26 @@ use App\Http\Controllers\API\RegisterController;
 
 
 Route::controller(RegisterController::class)->group(function () {
-    Route::post('register', 'register');
-    Route::post('login', 'login');
+        Route::post('register', 'register');
+        Route::post('login', 'login');
 });
 
 Route::group(['namespace' => 'API', 'middleware' => ['auth:sanctum']], function () {
-    Route::group(['prefix' => 'contact'], function () {
-        Route::get('/search', [ContactController::class, 'search'])->name('SearchByFullname');
-        Route::get('/getContacts/{id}', [ContactController::class, 'getContacts'])->name('GetContacts');
-        Route::post('/deleteContact/{id}', [ContactController::class, 'deleteContact'])->name('GetContacts');
+
+    Route::group(['namespace' => 'Admin'], function () {
+        Route::group(['prefix' => 'users'], function () {
+            Route::delete('/delete', [UserController::class, 'delete'])->name('delete');
+        });
     });
+
+    Route::group(['namespace' => 'User'], function () {
+        Route::group(['prefix' => 'contacts'], function () {
+            Route::get('/search', [ContactController::class, 'search'])->name('search');
+            Route::get('/get-user-contacts', [ContactController::class, 'getUserContacts'])->name('get_user_contacts');
+            Route::post('/bulk-create', [ContactController::class, 'bulkCreate'])->name('bulk_create');
+            Route::put('/bulk-update', [ContactController::class, 'bulkUpdate'])->name('bulk_update');
+            Route::delete('/delete', [ContactController::class, 'delete'])->name('delete');
+        });
+    });
+
 });
-
-

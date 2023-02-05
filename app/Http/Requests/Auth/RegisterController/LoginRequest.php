@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\ContactController;
+namespace App\Http\Requests\Auth\RegisterController;
 
 use App\Services\API\BaseService;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class SearchRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,14 +27,15 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => ['string', 'required'],
+            'email' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
-            BaseService::sendError('validation error', $validator->errors()->messages(), 400)
+            BaseService::sendError('validation error', $validator->errors()->messages())
         );
     }
 }

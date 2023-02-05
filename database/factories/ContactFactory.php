@@ -20,10 +20,6 @@ class ContactFactory extends Factory
     {
         return [
             'user_id' => User::all()->random()->id,
-            'name' => fake()->name(),
-            'surname' => fake()->lastName(),
-            'patronymic' => fake()->lastName(),
-            'birthdate' => fake()->date(),
             'phone_number' => fake()->phoneNumber(),
             'email' => fake()->unique()->safeEmail(),
         ];

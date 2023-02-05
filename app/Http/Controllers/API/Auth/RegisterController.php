@@ -1,15 +1,13 @@
 <?php
-   
-namespace App\Http\Controllers\API;
-   
-use Illuminate\Http\Request;
-use App\Services\API\BaseService;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\RegisterController\RegisterRequest;
 
-use Validator;
-   
+namespace App\Http\Controllers\API\Auth;
+
+use App\Http\Requests\Auth\RegisterController\RegisterRequest;
+use App\Models\User;
+use App\Services\API\BaseService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class RegisterController
 {
     /**
@@ -24,10 +22,10 @@ class RegisterController
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
-   
+
         return BaseService::sendResponse($success, 'User register successfully.');
     }
-   
+
     /**
      * Login api
      *
@@ -35,14 +33,14 @@ class RegisterController
      */
     public function login(Request $request)
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+            $user = Auth::user();
+            $success['token'] =  $user->createToken('MyApp')->plainTextToken;
             $success['name'] =  $user->name;
-   
+
             return BaseService::sendResponse($success, 'User login successfully.');
-        } else { 
+        } else {
             return BaseService::sendError('Unauthorised.', ['error'=>'Unauthorised']);
-        } 
+        }
     }
 }

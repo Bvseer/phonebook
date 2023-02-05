@@ -11,7 +11,7 @@ class BaseService
      *
      * @return \Illuminate\Http\Response
      */
-    public static function sendResponse($result, $message)
+    public static function sendResponse($result, $message, $code = 200)
     {
         $response = [
             'success' => true,
@@ -19,7 +19,7 @@ class BaseService
             'message' => $message,
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, $code);
     }
 
 
