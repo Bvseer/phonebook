@@ -12,11 +12,11 @@ Clone repository to your local machine
 ```bash
   git clone https://github.com/Bvseer/phonebook.git
 ```
-Update dependencies
+Install dependencies
 ```bash
-  composer update
+  composer install
 ``` 
-Migrate database tables (print 'yes' when it asks to create database)
+Migrate database tables
 ```bash
   php artisan migrate
 ``` 
